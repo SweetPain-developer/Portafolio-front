@@ -1,5 +1,5 @@
 const cancelar = () => {
-    let url = 'file:///C:/Users/angel/Desktop/Portafolio-front/Administardor/administrar-contrato/administrar-contrato.html';
+    let url = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/administrar-contrato/administrar-contrato.html';
     window.location.assign(url);
 }; 
 
@@ -185,7 +185,7 @@ const actualizar = () => {
                 respuesta.mensaje,
                 'success'
             ).then( x=> {
-                let url = 'file:///C:/Users/angel/Desktop/Portafolio-front/Administardor/administrar-contrato/administrar-contrato.html'
+                let url = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/administrar-contrato/administrar-contrato.html'
                 window.location.assign(url);
             });
         }

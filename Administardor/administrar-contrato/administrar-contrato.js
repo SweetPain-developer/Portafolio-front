@@ -3,7 +3,7 @@ let pageIndex = 0;
 const editar = (id) => {
     console.info('Identificador',id);
     // cambiar al momento de llegar al editar
-    let url = `file:///C:/Users/angel/Desktop/Portafolio-front/Administardor/administrar-contrato/editar.html?id=${id}`;
+    let url = `file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/administrar-contrato/editar.html?id=${id}`;
     window.location.assign(url);
 };
 

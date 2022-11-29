@@ -65,12 +65,16 @@
           </div>
           <div class="input-group mb-3">
             <label class="input-group-text" for="tipo_usuario">Tipo usuario</label>
-            <select class="form-select" id="tipo_usuario">
+            <select class="form-select" id="tipo_usuario" onchange="Agregar_empresa()" disabled>
               <option selected>Seleccione...</option>
               <option value="1">Administrador</option>
               <option value="2">Profesional</option>
               <option value="3">Cliente</option>
+              <option value="4">Asesor telefónico</option>
             </select>
+          </div>
+          <div id="formulario">
+
           </div>
           <br>
           <a onclick="actualizar()" class="btn btn-primary" id="Agregar">Actualizar</a>

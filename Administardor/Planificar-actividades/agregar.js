@@ -222,7 +222,7 @@ const agregar = () => {
                 respuesta.mensaje,
                 'success'
             ).then( x=> {
-                let url = 'file:///C:/Users/angel/Desktop/Portafolio-front/Administardor/Planificar-actividades/Planificar-actividades.html';
+                let url = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/Planificar-actividades/Planificar-actividades.html';
                 window.location.assign(url);
             });
         }
@@ -231,7 +231,7 @@ const agregar = () => {
 };
 
 const cancelar = () => {
-    let url = 'file:///C:/Users/angel/Desktop/Portafolio-front/Administardor/Planificar-actividades/Planificar-actividades.html';
+    let url = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/Planificar-actividades/Planificar-actividades.html';
     window.location.assign(url);
 }; 
 // LLamadas

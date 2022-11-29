@@ -3,7 +3,7 @@ let pageIndex = 0;
 const editar = (id) => {
     console.info('Identificador',id);
     // cambiar al momento de llegar al editar
-    window.location.assign(`file:///C:/Users/angel/Desktop/Portafolio-front/Administardor/Planificar-actividades/editar.html?id=${id}`);
+    window.location.assign(`file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/Planificar-actividades/editar.html?id=${id}`);
 };
 
 const sumarPagina = () => {

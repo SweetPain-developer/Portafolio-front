@@ -2,7 +2,7 @@ let pageIndex = 0;
 
 const editar = (id) => {
     console.info('Identificador',id);
-    window.location.assign(`file:///C:/Users/angel/Desktop/Portafolio-front/Administardor/usuarios/editar.html?id=${id}`);
+    window.location.assign(`file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/usuarios/editar.html?id=${id}`);
 };
 
 

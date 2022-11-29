@@ -5,15 +5,15 @@ const login = () => {
         {
 
             tipo: "ADMINISTRADOR",
-            url: 'file:///C:/Users/angel/Desktop/Portafolio-front/Administardor/Dashboard.html'
+            url: 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/Dashboard.html'
         },
         {
             tipo: "PROFESIONAL",
-            url: 'file:///C:/Users/angel/Desktop/Portafolio-front/Profesional/Dashboard.html'
+            url: 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Profesional/Dashboard.html'
         },
         {
             tipo: "CLIENTE",
-            url: 'file:///C:/Users/angel/Desktop/Portafolio-front/Cliente/Dashboard.html'
+            url: 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Cliente/Dashboard.html'
         }
     ];
     if (user === '' || pass === '') {

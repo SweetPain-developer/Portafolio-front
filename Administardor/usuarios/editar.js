@@ -1,6 +1,59 @@
-const cancelar = () => {
-    window.location.assign('file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/usuarios/Administrar-Usuario.html');
+// extraer token
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const token = urlParams.get('id').split('?')[1].replace('tkn=','').trim();
+console.info('token',token);
+// declaraciones y asignaciones
+let nombre_usuario;
+let id_empresa;
+
+// Metodos de navegacion
+const navegacion = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/';
+
+const dashboard = () => {
+    let url = navegacion +'Dashboard.html?tkn='+token;
+    window.location.assign(url);
 };
+
+const admin_usuario = () => {
+    let url = navegacion +'usuarios/Administrar-Usuario.html?tkn='+token;
+    window.location.assign(url);
+};
+
+const planificar_actividades = () => {
+    let url = navegacion 
+    + 'Planificar-actividades/Planificar-actividades.html?tkn='
+    +token;
+    window.location.assign(url);
+};
+
+const administrar_contrato = () => {
+    let url = navegacion 
+    + 'administrar-contrato/administrar-contrato.html?tkn='
+    +token;
+    window.location.assign(url);
+};
+
+const pago = () => {
+    let url = navegacion + 'pago/pago.html?tkn='+token;
+    window.location.assign(url);
+};
+
+const estadistica_global = () => {
+    let url = navegacion + 'estadistica-global/estadistica-global.html?tkn='+token;
+    window.location.assign(url);
+};
+
+const estadistica_cliente = () => {
+    let url = navegacion + 'estadistica-cliente/estadistica-cliente.html?tkn='+token;
+    window.location.assign(url);
+};
+// fin metodos de navegacion
+
+const cancelar = () => {
+    let url = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/usuarios/Administrar-Usuario.html?tkn=';
+    window.location.assign(url+token);
+}; 
  
 const validador = ({nombre,apellido,password,usuario,id_tipo,telefono,email}) => {
     if(nombre === '') {
@@ -59,8 +112,9 @@ const obtener_regiones = () =>{
     const modelo_envio = { };
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
+    cabecera.append("Authorization", "Bearer "+token);
     const cuerpo_envio = JSON.stringify(modelo_envio);
-    var requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: cuerpo_envio,
@@ -93,8 +147,9 @@ const obtener_comunas = () => {
     };
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
+    cabecera.append("Authorization", "Bearer "+token);
     const cuerpo_envio = JSON.stringify(modelo_envio);
-    var requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: cuerpo_envio,
@@ -118,7 +173,7 @@ const Agregar_empresa = () => {
     let id_tipo = document.getElementById('tipo_usuario').value;
     let formulario = document.getElementById('formulario');
     console.info('este es el id',id_tipo);
-    if (Number(id_tipo) === 3) {    
+    if (Number(id_tipo) === 1) {    
         formulario.innerHTML = `
         <div class="input-group mb-3">
             <span class="input-group-text" id="inputGroup-sizing-default">Nombre Empresa</span>
@@ -155,14 +210,15 @@ const Agregar_empresa = () => {
 };
 
 const obtener_usuario = () => {
-    var queryString = window.location.search;
-    var urlParams = new URLSearchParams(queryString);
-    var id = urlParams.get('id');
+    let queryString = window.location.search;
+    let urlParams = new URLSearchParams(queryString);
+    let id = urlParams.get('id').split('?')[0];
     console.info('id',id);
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
+    cabecera.append("Authorization", "Bearer "+token);
     const cuerpo_envio = JSON.stringify({ id });
-    var requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: cuerpo_envio,
@@ -180,6 +236,7 @@ const obtener_usuario = () => {
                     'error'
                 );
             }
+            nombre_usuario = respuesta.data[0].usuario;
             console.info('respuesta', respuesta);
             document.getElementById('nombre').value=respuesta.data[0].nombre;
             document.getElementById('apellido').value = respuesta.data[0].apellido;
@@ -188,23 +245,20 @@ const obtener_usuario = () => {
             document.getElementById('tipo_usuario').value = respuesta.data[0].tipo_usuario;
             document.getElementById('telefono').value = respuesta.data[0].telefono;
             document.getElementById('email').value = respuesta.data[0].email;
-            if (Number(respuesta.data[0].tipo_usuario) === 3){
+            if (Number(respuesta.data[0].tipo_usuario) === 1){
                 Agregar_empresa();
             }
         })
         .catch(error => console.log('error', error));
 
 };
-let id_empresa;
+
 const obtener_empresa = () => {
-    var queryString = window.location.search;
-    var urlParams = new URLSearchParams(queryString);
-    var id_usuario = urlParams.get('id');
-    console.info('id_usuario',id_usuario);
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
-    const cuerpo_envio = JSON.stringify({ id_usuario });
-    var requestOptions = {
+    cabecera.append("Authorization", "Bearer "+token);
+    const cuerpo_envio = JSON.stringify({ nombre_usuario });
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: cuerpo_envio,
@@ -223,7 +277,6 @@ const obtener_empresa = () => {
                 );
             }
             console.info('respuesta', respuesta);
-            id_empresa = respuesta.data[0].id;
             document.getElementById('empresaNombre').value=respuesta.data[0].nombre;
             document.getElementById('rutEmpresa').value = respuesta.data[0].rut;
             document.getElementById('fonoEmpresa').value = respuesta.data[0].telefono;
@@ -231,7 +284,7 @@ const obtener_empresa = () => {
             obtener_comunas();
             setTimeout( () => { 
                 document.getElementById('comuna').value = respuesta.data[0].id_comuna;
-            },'100');
+            },'200');
             document.getElementById('calleEmpresa').value = respuesta.data[0].calle;
         })
         .catch(error => console.log('error', error));
@@ -245,9 +298,9 @@ setTimeout( () => {
 }, '200');
 
 const actualizar = () => {
-    var queryString = window.location.search;
-    var urlParams = new URLSearchParams(queryString);
-    var anuncioParam = urlParams.get('id');
+    let queryString = window.location.search;
+    let urlParams = new URLSearchParams(queryString);
+    let anuncioParam = urlParams.get('id');
     let nombre = document.getElementById('nombre').value;
     let apellido = document.getElementById('apellido').value;
     let password = document.getElementById('password_usuario').value;
@@ -261,7 +314,7 @@ const actualizar = () => {
     if (!validado) {
         return Swal.fire(
             'Completar formulario',
-            'Es necesario Completar el formulario par poder continuar.',
+            'Es necesario completar el formulario par poder continuar.',
             'error'
         ); 
     }
@@ -277,7 +330,7 @@ const actualizar = () => {
         email,
     };
     console.info('modelo_entrada',modelo_envio);
-    if (Number(id_tipo) === 3 ) {
+    if (Number(id_tipo) === 1 ) {
         nom_empresa = document.getElementById('empresaNombre').value;
         fono_empresa = document.getElementById('fonoEmpresa').value;
         calle = document.getElementById('calleEmpresa').value;
@@ -288,7 +341,7 @@ const actualizar = () => {
         if (!vali) {
             return Swal.fire(
                 'Completar formulario',
-                'Es necesario Completar el formulario par poder continuar.',
+                'Es necesario completar el formulario par poder continuar.',
                 'error'
             ); 
         }
@@ -302,8 +355,9 @@ const actualizar = () => {
     }
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
+    cabecera.append("Authorization", "Bearer "+token);
     const cuerpo_envio = JSON.stringify(modelo_envio);
-    var requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: cuerpo_envio,
@@ -311,26 +365,27 @@ const actualizar = () => {
     };
     console.info('Cuerpo', requestOptions);
     fetch("http://localhost:3001/dogueSolution/api/usuario/actualizar-usuario", requestOptions)
-        .then(response => response.text())
-        .then(result => {
-            respuesta = JSON.parse(result);
-            if (respuesta.flg_ok === 0) {
-                return Swal.fire(
-                    'Error actualizar usuario',
-                    respuesta.mensaje,
-                    'error'
-                );
-            } else {
-                Swal.fire(
-                    'Usuario Actualizado',
-                    respuesta.mensaje,
-                    'success'
-                ).then( x=> {
-                    window.location.assign('file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/usuarios/Administrar-Usuario.html');
-                });
+    .then(response => response.text())
+    .then(result => {
+        respuesta = JSON.parse(result);
+        if (respuesta.flg_ok === 0) {
+            return Swal.fire(
+                'Error actualizar usuario',
+                respuesta.mensaje,
+                'error'
+            );
+        } else {
+            Swal.fire(
+                'Usuario Actualizado',
+                respuesta.mensaje,
+                'success'
+            ).then( x=> {
+                let url = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/usuarios/Administrar-Usuario.html?tkn='
+                window.location.assign(url+token);
+            });
 
 
-            }
-        })
-        .catch(error => console.log('error', error));
+        }
+    })
+    .catch(error => console.log('error', error));
 };

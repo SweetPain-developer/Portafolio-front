@@ -1,34 +1,91 @@
-const cancelar = () => {
-    let url = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/Planificar-actividades/Planificar-actividades.html';
+// extraer token
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const token = urlParams.get('id').split('?')[1].replace('tkn=','').trim();
+// Declaraciones y asignaciones
+let urls = [
+    'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/', // 0
+    'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/Planificar-actividades/Planificar-actividades.html', // 1
+    'http://localhost:3001/dogueSolution/api/usuario/obtener-usuario-tipo', // 2
+    'http://localhost:3001/dogueSolution/api/Planificar-Actividades/listar-estados', // 3
+    'http://localhost:3001/dogueSolution/api/Planificar-Actividades/listar-servicios',// 4
+    'http://localhost:3001/dogueSolution/api/Planificar-Actividades/editar-actividad', // 5
+    'http://localhost:3001/dogueSolution/api/Planificar-Actividades/obtener-actividad', // 6
+];
+// Metodos de navegacion
+const navegacion = urls[0];
+
+const dashboard = () => {
+    let url = navegacion +'Dashboard.html?tkn='+token;
     window.location.assign(url);
 };
+
+const admin_usuario = () => {
+    let url = navegacion +'usuarios/Administrar-Usuario.html?tkn='+token;
+    window.location.assign(url);
+};
+
+const planificar_actividades = () => {
+    let url = navegacion 
+    + 'Planificar-actividades/Planificar-actividades.html?tkn='
+    +token;
+    window.location.assign(url);
+};
+
+const administrar_contrato = () => {
+    let url = navegacion 
+    + 'administrar-contrato/administrar-contrato.html?tkn='
+    +token;
+    window.location.assign(url);
+};
+
+const pago = () => {
+    let url = navegacion + 'pago/pago.html?tkn='+token;
+    window.location.assign(url);
+};
+
+const estadistica_global = () => {
+    let url = navegacion + '?tkn='+token;
+    window.location.assign(url);
+};
+
+const estadistica_cliente = () => {
+    let url = navegacion + '?tkn='+token;
+    window.location.assign(url);
+};
+// fin metodos de navegacion
+
+const cancelar = () => {
+    let url = urls[1] + '?tkn=' + token;
+    window.location.assign(url);
+}; 
 
 const profesional = () => {
     const combobox = document.getElementById("profesional");
     combobox.innerHTML=`
         <option selected>Seleccione...</option>
     `; 
-    let url = 'http://localhost:3001/dogueSolution/api/usuario/obtener-usuario-tipo';
     const modelo_envio = {
         tipo:2
     };
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
+    cabecera.append("Authorization", "Bearer "+token);
     const cuerpo_envio = JSON.stringify(modelo_envio);
-    var requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: cuerpo_envio,
         redirect: 'follow'
     };
-    fetch(url, requestOptions)
+    fetch(urls[2], requestOptions)
     .then(response => response.text())
     .then( resp => {
         let respuesta = JSON.parse(resp);
         console.info(respuesta);
         respuesta.data.map( item => {
             combobox.innerHTML+=`
-            <option value="${item.id}">${item.nombre}</option>
+            <option value="${item.usuario}">${item.usuario}</option>
             `; 
         });
     })
@@ -40,21 +97,21 @@ const cliente = () => {
     combobox.innerHTML=`
         <option selected>Seleccione...</option>
     `; 
-    let url = 'http://localhost:3001/dogueSolution/api/usuario/obtener-usuario-tipo';
     const modelo_envio = {
-        tipo:3
+        tipo:1
     };
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
+    cabecera.append("Authorization", "Bearer "+token);
     const cuerpo_envio = JSON.stringify(modelo_envio);
-    var requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: cuerpo_envio,
         redirect: 'follow'
     };
     console.info('requestOptions',requestOptions);
-    fetch(url, requestOptions)
+    fetch(urls[2], requestOptions)
     .then(response => response.text())
     .then( resp => {
         let respuesta = JSON.parse(resp);
@@ -62,7 +119,7 @@ const cliente = () => {
         
         respuesta.data.map( item => {
             combobox.innerHTML+=`
-            <option value="${item.id}" >${item.nombre}</option>
+            <option value="${item.usuario}" >${item.usuario}</option>
             `;
         });
     })
@@ -74,19 +131,19 @@ const estado = () => {
     combobox.innerHTML=`
         <option selected>Seleccione...</option>
     `; 
-    let url = 'http://localhost:3001/dogueSolution/api/Planificar-Actividades/listar-estados';
     const modelo_envio = {};
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
+    cabecera.append("Authorization", "Bearer "+token);
     const cuerpo_envio = JSON.stringify(modelo_envio);
-    var requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: cuerpo_envio,
         redirect: 'follow'
     };
     console.info('requestOptions',requestOptions);
-    fetch(url, requestOptions)
+    fetch(urls[3], requestOptions)
     .then(response => response.text())
     .then( resp => {
         let respuesta = JSON.parse(resp);
@@ -104,20 +161,20 @@ const servicio = () => {
     const combobox = document.getElementById("servicio");
     combobox.innerHTML=`
         <option selected>Seleccione...</option>
-    `; 
-    let url = 'http://localhost:3001/dogueSolution/api/Planificar-Actividades/listar-servicios';
+    `;
     const modelo_envio = {};
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
+    cabecera.append("Authorization", "Bearer "+token);
     const cuerpo_envio = JSON.stringify(modelo_envio);
-    var requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: cuerpo_envio,
         redirect: 'follow'
     };
     console.info('requestOptions',requestOptions);
-    fetch(url, requestOptions)
+    fetch(urls[4], requestOptions)
     .then(response => response.text())
     .then( resp => {
         let respuesta = JSON.parse(resp);
@@ -136,47 +193,50 @@ profesional();
 estado();
 servicio();
 
-const obtener_usuario = () => {
-    var queryString = window.location.search;
-    var urlParams = new URLSearchParams(queryString);
-    var id = urlParams.get('id');
+const obtener_actividad = () => {
+    let queryString = window.location.search;
+    let urlParams = new URLSearchParams(queryString);
+    let id = urlParams.get('id').split('?')[0];
     console.info('id',id);
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
+    cabecera.append("Authorization", "Bearer "+token);
     const cuerpo_envio = JSON.stringify({ id });
-    var requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: cuerpo_envio,
         redirect: 'follow'
     };
     console.info('requestOptions',requestOptions.body);
-    let url ='http://localhost:3001/dogueSolution/api/Planificar-Actividades/obtener-actividad';
-    fetch(url, requestOptions)
-        .then(response => response.text())
-        .then(result => {
-            respuesta = JSON.parse(result);
-            if (respuesta.flg_ok === 0) {
-                return Swal.fire(
-                    'Problemas para encontrar la actividad',
-                    respuesta.mensaje,
-                    'error'
-                );
-            }
-            console.info('respuesta', respuesta);
-            document.getElementById('cliente').value=respuesta.data[0].cliente;
-            document.getElementById('profesional').value = respuesta.data[0].profesional;
-            document.getElementById('estado').value = respuesta.data[0].id_estado;
-            document.getElementById('servicio').value = respuesta.data[0].id_servicio;
-            document.getElementById('fch_programada').value = respuesta.data[0].fecha_programada;
-            document.getElementById('fch_registro').value = respuesta.data[0].fecha_registro;
-            document.getElementById('descripcion').value = respuesta.data[0].descripcion;
-        })
-        .catch(error => console.log('error', error));
+    fetch(urls[6], requestOptions)
+    .then(response => response.text())
+    .then(result => {
+        respuesta = JSON.parse(result);
+        if (respuesta.flg_ok === 0) {
+            return Swal.fire(
+                'Problemas para encontrar la actividad',
+                respuesta.mensaje,
+                'error'
+            );
+        }
+        console.info('respuesta', respuesta);
+        console.info('Clientes', respuesta.data[0].cliente);
+        document.getElementById('cliente').value = respuesta.data[0].cliente;
+        document.getElementById('profesional').value = respuesta.data[0].profesional;
+        document.getElementById('estado').value = respuesta.data[0].id_estado;
+        document.getElementById('servicio').value = respuesta.data[0].id_servicio;
+        document.getElementById('fch_programada').value = respuesta.data[0].fecha_programada;
+        document.getElementById('fch_registro').value = respuesta.data[0].fecha_registro;
+        document.getElementById('descripcion').value = respuesta.data[0].descripcion;
+    })
+    .catch(error => console.log('error', error));
 
 }
 
-obtener_usuario();
+setTimeout( () => {
+    obtener_actividad();
+}, '200');
 
 const validador = ({
     cliente,
@@ -214,7 +274,7 @@ const validador = ({
 const actualizar = () => {
     let queryString = window.location.search;
     let urlParams = new URLSearchParams(queryString);
-    let anuncioParam = urlParams.get('id');
+    let anuncioParam = urlParams.get('id').split('?')[0];
     let cliente = document.getElementById('cliente').value;
     let profesional = document.getElementById('profesional').value;
     let estado = document.getElementById('estado').value;
@@ -245,11 +305,19 @@ const actualizar = () => {
     if (!validado) {
         return Swal.fire(
             'Completar formulario',
-            'Es necesario Completar el formulario par poder continuar.',
+            'Es necesario completar el formulario par poder continuar.',
             'error'
         ); 
     }
-    
+    let fecha_pro = fecha_programada.split('/').join('');
+    let fecha_reg = fecha_registro.split('/').join('');
+    if (fecha_pro < fecha_reg) {
+        return Swal.fire(
+            'Completar formulario',
+            'La fecha de registro debe ser menor a la fecha programada',
+            'error'
+        ); 
+    }
     const modelo_envio = {
         id:anuncioParam,
         cliente,
@@ -264,16 +332,16 @@ const actualizar = () => {
 
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
+    cabecera.append("Authorization", "Bearer "+token);
     const cuerpo_envio = JSON.stringify(modelo_envio);
-    var requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: cuerpo_envio,
         redirect: 'follow'
     };
     console.info('Cuerpo', requestOptions);
-    let link ='http://localhost:3001/dogueSolution/api/Planificar-Actividades/editar-actividad';
-    fetch(link, requestOptions)
+    fetch(urls[5], requestOptions)
     .then(response => response.text())
     .then(result => {
         respuesta = JSON.parse(result);
@@ -289,7 +357,7 @@ const actualizar = () => {
                 respuesta.mensaje,
                 'success'
             ).then( x=> {
-                let url = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/Planificar-actividades/Planificar-actividades.html'
+                let url = urls[1]+'?tkn='+token;
                 window.location.assign(url);
             });
         }

@@ -1,23 +1,78 @@
+// extraer token
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const token = urlParams.get('tkn');
+
+let urls = [
+    'http://localhost:3001/dogueSolution/api/usuario/obtener-usuario-tipo', // 0
+    'http://localhost:3001/dogueSolution/api/Administrar-Contrato/listra-plan',// 1
+    'http://localhost:3001/dogueSolution/api/Administrar-Contrato/agregar-contrato', // 2
+    'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/administrar-contrato/administrar-contrato.html' // 3
+];
+
+// Metodos de navegacion
+const navegacion = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/';
+
+const dashboard = () => {
+    let url = navegacion +'Dashboard.html?tkn='+token;
+    window.location.assign(url);
+};
+
+const admin_usuario = () => {
+    let url = navegacion +'usuarios/Administrar-Usuario.html?tkn='+token;
+    window.location.assign(url);
+};
+
+const planificar_actividades = () => {
+    let url = navegacion 
+    + 'Planificar-actividades/Planificar-actividades.html?tkn='
+    +token;
+    window.location.assign(url);
+};
+
+const administrar_contrato = () => {
+    let url = navegacion 
+    + 'administrar-contrato/administrar-contrato.html?tkn='
+    +token;
+    window.location.assign(url);
+};
+
+const pago = () => {
+    let url = navegacion + 'pago/pago.html?tkn='+token;
+    window.location.assign(url);
+};
+
+const estadistica_global = () => {
+    let url = navegacion + 'estadistica-global/estadistica-global.html?tkn='+token;
+    window.location.assign(url);
+};
+
+const estadistica_cliente = () => {
+    let url = navegacion + 'estadistica-cliente/estadistica-cliente.html?tkn='+token;
+    window.location.assign(url);
+};
+// fin metodos de navegacion
+
 const cliente = () => {
     const combobox = document.getElementById("cliente");
     combobox.innerHTML=`
         <option selected>Seleccione...</option>
     `; 
-    let url = 'http://localhost:3001/dogueSolution/api/usuario/obtener-usuario-tipo';
     const modelo_envio = {
-        tipo:3
+        tipo:1
     };
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
+    cabecera.append("Authorization", "Bearer " + token);
     const cuerpo_envio = JSON.stringify(modelo_envio);
-    var requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: cuerpo_envio,
         redirect: 'follow'
     };
     console.info('requestOptions',requestOptions);
-    fetch(url, requestOptions)
+    fetch(urls[0], requestOptions)
     .then(response => response.text())
     .then( resp => {
         let respuesta = JSON.parse(resp);
@@ -25,7 +80,7 @@ const cliente = () => {
         
         respuesta.data.map( item => {
             combobox.innerHTML+=`
-            <option value="${item.id}" >${item.nombre}</option>
+            <option value="${item.usuario}" >${item.usuario}</option>
             `;
         });
     })
@@ -36,22 +91,22 @@ const planes = () => {
     const combobox = document.getElementById("Plan");
     combobox.innerHTML=`
         <option selected>Seleccione...</option>
-    `; 
-    let url = 'http://localhost:3001/dogueSolution/api/Administrar-Contrato/listra-plan';
+    `;
     const modelo_envio = {
-        tipo:3
+        tipo:1
     };
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
+    cabecera.append("Authorization", "Bearer " + token);
     const cuerpo_envio = JSON.stringify(modelo_envio);
-    var requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: cuerpo_envio,
         redirect: 'follow'
     };
     console.info('requestOptions',requestOptions);
-    fetch(url, requestOptions)
+    fetch(urls[1], requestOptions)
     .then(response => response.text())
     .then( resp => {
         let respuesta = JSON.parse(resp);
@@ -86,34 +141,34 @@ const validador = ({cliente,Plan, fch_contrato,fch_vencimiento}) => {
 };
 
 const agregar = () => {
-    let id_usuario = document.getElementById('cliente').value;
+    let usuario = document.getElementById('cliente').value;
     let Plan = document.getElementById('Plan').value;
     let fch_contrato = document.getElementById('fch_contrato').value;
     let fch_vencimiento = document.getElementById('fch_vencimiento').value;
-    console.info('Datos llegando',{id_usuario,Plan, fch_contrato,fch_vencimiento});
-    let validado = validador({id_usuario,Plan, fch_contrato,fch_vencimiento});
+    console.info('Datos llegando',{usuario,Plan, fch_contrato,fch_vencimiento});
+    let validado = validador({usuario,Plan, fch_contrato,fch_vencimiento});
     
     if (!validado) {
         return Swal.fire(
             'Completar formulario',
-            'Es necesario Completar el formulario par poder continuar.',
+            'Es necesario completar el formulario par poder continuar.',
             'error'
         ); 
     }
-    const modelo_envio = {id_usuario,Plan, fch_contrato,fch_vencimiento};
+    const modelo_envio = {usuario,Plan, fch_contrato,fch_vencimiento};
     console.info('modelo_entrada',modelo_envio);
 
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
+    cabecera.append("Authorization", "Bearer " + token);
     const cuerpo_envio = JSON.stringify(modelo_envio);
-    var requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: cuerpo_envio,
         redirect: 'follow'
     };
-    let url = 'http://localhost:3001/dogueSolution/api/Administrar-Contrato/agregar-contrato';
-    fetch(url, requestOptions)
+    fetch(urls[2], requestOptions)
     .then(response => response.text())
     .then(result => {
         respuesta = JSON.parse(result);
@@ -129,7 +184,7 @@ const agregar = () => {
                 respuesta.mensaje,
                 'success'
             ).then( x=> {
-                let url = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/administrar-contrato/administrar-contrato.html';
+                let url = urls[3] + '?tkn=' + token;
                 window.location.assign(url);
             });
         }
@@ -138,6 +193,6 @@ const agregar = () => {
 };
 
 const cancelar = () => {
-    let url = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/administrar-contrato/administrar-contrato.html';
+    let url = urls[3] + '?tkn=' + token;
     window.location.assign(url);
 }; 

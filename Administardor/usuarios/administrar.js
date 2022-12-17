@@ -1,10 +1,66 @@
+
+// extraer token
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const token = urlParams.get('tkn');
+// declaraciones y asignaciones
 let pageIndex = 0;
+const principal = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/usuarios/';
+
+// Metodos de navegacion
+const navegacion = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/';
+
+const dashboard = () => {
+    let url = navegacion +'Dashboard.html?tkn='+token;
+    window.location.assign(url);
+};
+
+const admin_usuario = () => {
+    let url = navegacion +'usuarios/Administrar-Usuario.html?tkn='+token;
+    window.location.assign(url);
+};
+
+const planificar_actividades = () => {
+    let url = navegacion 
+    + 'Planificar-actividades/Planificar-actividades.html?tkn='
+    +token;
+    window.location.assign(url);
+};
+
+const administrar_contrato = () => {
+    let url = navegacion 
+    + 'administrar-contrato/administrar-contrato.html?tkn='
+    +token;
+    window.location.assign(url);
+};
+
+const pago = () => {
+    let url = navegacion + 'pago/pago.html?tkn='+token;
+    window.location.assign(url);
+};
+
+const estadistica_global = () => {
+    let url = navegacion + 'estadistica-global/estadistica-global.html?tkn='+token;
+    window.location.assign(url);
+};
+
+const estadistica_cliente = () => {
+    let url = navegacion + 'estadistica-cliente/estadistica-cliente.html?tkn='+token;
+    window.location.assign(url);
+};
+// fin metodos de navegacion
+
 
 const editar = (id) => {
     console.info('Identificador',id);
-    window.location.assign(`file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/usuarios/editar.html?id=${id}`);
+    let url = principal+`editar.html?id=${id}?tkn=${token}`;
+    window.location.assign(url);
 };
 
+const vista_agregar = () => {
+    let url = `agregar.html?tkn=${token}`;
+    window.location.assign(url);
+};
 
 const sumarPagina = () => {
     pageIndex = pageIndex + 1;
@@ -18,7 +74,7 @@ const restarPagina = () => {
 
 const cambiar_estado = (id,vigencia) => {
     console.info('Identificador',id,'vigencia',vigencia);
-    let vigencia_cambiada = vigencia === 1? 0 : 1;
+    let vigencia_cambiada = vigencia === 1 ? 0 : 1;
     let url = "http://localhost:3001/dogueSolution/api/usuario/cambiar-vigencia";
     let body = {
         id_usuario:id,
@@ -26,7 +82,8 @@ const cambiar_estado = (id,vigencia) => {
     };
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
-    var requestOptions = {
+    cabecera.append("Authorization", "Bearer "+token);
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: JSON.stringify( body ),
@@ -78,11 +135,12 @@ const listar_usuarios = () => {
         pageIndex:pageIndex,
         pageSize:Number(pageSize),
         sortDirection:'asc',
-        sortColum:""
+        sortColumn:""
     };
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
-    var requestOptions = {
+    cabecera.append("Authorization", "Bearer "+token);
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: JSON.stringify( body ),

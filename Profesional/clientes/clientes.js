@@ -2,89 +2,66 @@
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const token = urlParams.get('tkn');
-
+// declaraciones y asignaciones
 let urls = [
-    'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/administrar-contrato/editar.html',// 0
-    'http://localhost:3001/dogueSolution/api/Administrar-Contrato/listar-contratos', // 1
-    'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/administrar-contrato/agregar.html'
+    'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Profesional/clientes/',
+    'http://localhost:3001/dogueSolution/api/clientes/listar-checklist'
 ];
+
 // Metodos de navegacion
-const navegacion = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/';
+const navegacion = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Profesional/';
 
 const dashboard = () => {
     let url = navegacion +'Dashboard.html?tkn='+token;
     window.location.assign(url);
 };
 
-const admin_usuario = () => {
-    let url = navegacion +'usuarios/Administrar-Usuario.html?tkn='+token;
+const Cliente_menu = () => {
+    let url = navegacion +'clientes/clientes.html?tkn='+token;
+    window.location.assign(url);
+}; 
+const Actividades_menu = () => {
+    let url = navegacion +'Planificar-actividades/Planificar-actividades.html?tkn='+token;
+    window.location.assign(url);
+}; 
+const Caso_asesoria_menu = () => {
+    let url = navegacion +'caso-asesoria/caso-asesoria.html?tkn='+token;
     window.location.assign(url);
 };
+// fin Metodos de navegacion
 
-const planificar_actividades = () => {
-    let url = navegacion 
-    + 'Planificar-actividades/Planificar-actividades.html?tkn='
-    +token;
+const vista_agregar = () => {
+    let url = urls[0] + 'agregar.html?tkn=' + token;
     window.location.assign(url);
 };
-
-const administrar_contrato = () => {
-    let url = navegacion 
-    + 'administrar-contrato/administrar-contrato.html?tkn='
-    +token;
-    window.location.assign(url);
-};
-
-const pago = () => {
-    let url = navegacion + 'pago/pago.html?tkn='+token;
-    window.location.assign(url);
-};
-
-const estadistica_global = () => {
-    let url = navegacion + 'estadistica-global/estadistica-global.html?tkn='+token;
-    window.location.assign(url);
-};
-
-const estadistica_cliente = () => {
-    let url = navegacion + 'estadistica-cliente/estadistica-cliente.html?tkn='+token;
-    window.location.assign(url);
-};
-// fin metodos de navegacion
 
 let pageIndex = 0;
 
-const editar = (id) => {
-    console.info('Identificador',id);
-    // cambiar al momento de llegar al editar
-    let url =urls[0] + `?id=${id}?tkn=${token}`;
-    window.location.assign(url);
-};
-
-const vista_agregar = () => {
-    let url =urls[2] + `?tkn=${token}`;
-    window.location.assign(url);
-};
-
 const sumarPagina = () => {
     pageIndex = pageIndex + 1;
-    listar_contratos();
+    listar_checklist();
 };
 
 const restarPagina = () => {
     pageIndex = pageIndex - 1;
-    listar_contratos();
+    listar_checklist();
 };
 
-const listar_contratos = () => {
-    let tabla = document.getElementById('tablaContrato');
+const editar = (usuario) => {
+    let url = urls[0] + `editar.html?id=${usuario}?tkn=${token}`;
+    window.location.assign(url);
+}; 
+
+const listar_checklist = () => {
+    let tabla = document.getElementById('tablaCheckList');
     let pageSize = document.getElementById('pageSize')?.value || 5 ;
     tabla.innerHTML = `
     <thead>
         <tr>
-        <th scope="col" class="table-active" >Fecha contrato</th>
-        <th scope="col" class="table-active" >Fecha vencimiento</th>
-        <th scope="col" class="table-active" >usuario</th>
-        <th scope="col" class="table-active" >plan</th>
+        <th scope="col" class="table-active" >Cliente</th>
+        <th scope="col" class="table-active" >Actualizaciones</th>
+        <th scope="col" class="table-active" >Fecha Creacion</th>
+        <th scope="col" class="table-active" >Fecha Revision</th>
         <th scope="col" class="table-active" >Editar</th>
         </tr>
     </thead>
@@ -114,7 +91,7 @@ const listar_contratos = () => {
         
         if (respuesta.flg_ok === 0) {
             return Swal.fire(
-                'Problemas con la lista de contratos',
+                'Problemas con la lista de chequeo',
                 respuesta.mensaje,
                 'error'
             );
@@ -125,12 +102,12 @@ const listar_contratos = () => {
         respuesta.data.map(item => {
             tabla.insertRow(-1).innerHTML =`
             <tr>
-                <td> ${item.fecha_contrato} </td>
-                <td> ${item.fecha_vencimiento} </td>
-                <td> ${item.nombre} </td>
-                <td> ${item.nombre_plan} </td>
+                <td> ${item.nombre_usuario} </td>
+                <td> ${item.actualizaciones} </td>
+                <td> ${item.fecha_creacion} </td>
+                <td> ${item.fecha_revision} </td>
                 <td>
-                <a type="button" class="btn btn-outline-success" onClick="editar(${item.id})" >Editar</a>
+                <a type="button" class="btn btn-outline-success" onClick="editar(${item.id_lista})" >Editar</a>
                 </td>
             </tr>`;
             return item;
@@ -156,4 +133,4 @@ const listar_contratos = () => {
     .catch( error => console.info(error) );
 };  
 
-listar_contratos();
+listar_checklist();

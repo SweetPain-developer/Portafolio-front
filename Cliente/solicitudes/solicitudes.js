@@ -3,89 +3,59 @@ const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const token = urlParams.get('tkn');
 
-let urls = [
-    'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/administrar-contrato/editar.html',// 0
-    'http://localhost:3001/dogueSolution/api/Administrar-Contrato/listar-contratos', // 1
-    'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/administrar-contrato/agregar.html'
-];
-// Metodos de navegacion
-const navegacion = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/';
-
-const dashboard = () => {
-    let url = navegacion +'Dashboard.html?tkn='+token;
-    window.location.assign(url);
-};
-
-const admin_usuario = () => {
-    let url = navegacion +'usuarios/Administrar-Usuario.html?tkn='+token;
-    window.location.assign(url);
-};
-
-const planificar_actividades = () => {
-    let url = navegacion 
-    + 'Planificar-actividades/Planificar-actividades.html?tkn='
-    +token;
-    window.location.assign(url);
-};
-
-const administrar_contrato = () => {
-    let url = navegacion 
-    + 'administrar-contrato/administrar-contrato.html?tkn='
-    +token;
-    window.location.assign(url);
-};
-
-const pago = () => {
-    let url = navegacion + 'pago/pago.html?tkn='+token;
-    window.location.assign(url);
-};
-
-const estadistica_global = () => {
-    let url = navegacion + 'estadistica-global/estadistica-global.html?tkn='+token;
-    window.location.assign(url);
-};
-
-const estadistica_cliente = () => {
-    let url = navegacion + 'estadistica-cliente/estadistica-cliente.html?tkn='+token;
-    window.location.assign(url);
-};
-// fin metodos de navegacion
-
 let pageIndex = 0;
 
-const editar = (id) => {
-    console.info('Identificador',id);
-    // cambiar al momento de llegar al editar
-    let url =urls[0] + `?id=${id}?tkn=${token}`;
+let urls = [
+    'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Cliente/solicitudes/',
+    'http://localhost:3001/dogueSolution/api/caso-asesoria/listar-incidencias'
+];
+
+// Metodos de navegación
+const navegacion = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Cliente/';
+
+const dashboard = () => {
+    let url = navegacion+ 'Dashboard.html?tkn='+token;
+    window.location.assign(url);
+};
+const Solicitudes = () => {
+    let url = navegacion+ 'solicitudes/solicitudes.html?tkn='+token;
+    window.location.assign(url);
+};
+const Reportes = () => {
+    let url = navegacion+ 'reportes/reportes.html?tkn='+token;
+    window.location.assign(url);
+};
+const Pagos = () => {
+    let url = navegacion+ 'pagos/pagos.html?tkn='+token;
     window.location.assign(url);
 };
 
-const vista_agregar = () => {
-    let url =urls[2] + `?tkn=${token}`;
-    window.location.assign(url);
-};
+// fin Metodos de navegación
 
 const sumarPagina = () => {
     pageIndex = pageIndex + 1;
-    listar_contratos();
+    listar_asesorias();
 };
 
 const restarPagina = () => {
     pageIndex = pageIndex - 1;
-    listar_contratos();
+    listar_asesorias();
 };
 
-const listar_contratos = () => {
-    let tabla = document.getElementById('tablaContrato');
+const vista_agregar = () => {
+    let url = urls[0]+`agregar.html?tkn=${token}`;
+    window.location.assign(url);
+};
+
+const listar_incidencias = () => {
+    let tabla = document.getElementById('tablaIncidencias');
     let pageSize = document.getElementById('pageSize')?.value || 5 ;
     tabla.innerHTML = `
     <thead>
         <tr>
-        <th scope="col" class="table-active" >Fecha contrato</th>
-        <th scope="col" class="table-active" >Fecha vencimiento</th>
-        <th scope="col" class="table-active" >usuario</th>
-        <th scope="col" class="table-active" >plan</th>
-        <th scope="col" class="table-active" >Editar</th>
+        <th scope="col" class="table-active" >Descripcion</th>
+        <th scope="col" class="table-active" >Usuario</th>
+        <th scope="col" class="table-active" >tipo</th>
         </tr>
     </thead>
     <tbody id="cuerpoTabla">
@@ -93,14 +63,14 @@ const listar_contratos = () => {
     let filter = document.getElementById('buscador').value;
     let body = {
         filter: filter.split(' '),
-        pageIndex: pageIndex,
-        pageSize: Number(pageSize),
+        pageIndex:pageIndex,
+        pageSize:Number(pageSize),
         sortDirection:'asc',
         sortColumn:""
     };
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
-    cabecera.append("Authorization", "Bearer " + token);
+    cabecera.append("Authorization", "Bearer "+token);
     let requestOptions = {
         method: 'POST',
         headers: cabecera,
@@ -114,7 +84,7 @@ const listar_contratos = () => {
         
         if (respuesta.flg_ok === 0) {
             return Swal.fire(
-                'Problemas con la lista de contratos',
+                'Problemas con la lista de incidencias',
                 respuesta.mensaje,
                 'error'
             );
@@ -125,18 +95,15 @@ const listar_contratos = () => {
         respuesta.data.map(item => {
             tabla.insertRow(-1).innerHTML =`
             <tr>
-                <td> ${item.fecha_contrato} </td>
-                <td> ${item.fecha_vencimiento} </td>
-                <td> ${item.nombre} </td>
-                <td> ${item.nombre_plan} </td>
-                <td>
-                <a type="button" class="btn btn-outline-success" onClick="editar(${item.id})" >Editar</a>
+                <td> ${item.descripcion}</td>
+                <td> ${item.nombre_usuario}</td>
+                <td> ${item.tipo}</td>
                 </td>
             </tr>`;
             return item;
         });
         tabla.innerHTML +=`<tr> 
-        <td colspan="5" class="table-active">
+        <td colspan="3" class="table-active">
             <div class="col-0 float-end">
                 <select class="form-select" id="pageSize" onchange="listar_usuarios()">
                     <option value="5"  ${ Number(pageSize) === 5 ? 'selected' : '' } >5</option>
@@ -154,6 +121,6 @@ const listar_contratos = () => {
         </tr>`;
     })
     .catch( error => console.info(error) );
-};  
+};
 
-listar_contratos();
+listar_incidencias();

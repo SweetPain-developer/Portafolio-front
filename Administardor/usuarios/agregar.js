@@ -1,124 +1,176 @@
-const validador = ({nombre,apellido,password,usuario,id_tipo,telefono,email}) => {
-    if(nombre === '') {
+// extraer token
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const token = urlParams.get('tkn');
+
+const principal = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/usuarios/';
+
+// Metodos de navegacion
+const navegacion = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/';
+
+const dashboard = () => {
+    let url = navegacion +'Dashboard.html?tkn='+token;
+    window.location.assign(url);
+};
+
+const admin_usuario = () => {
+    let url = navegacion +'usuarios/Administrar-Usuario.html?tkn='+token;
+    window.location.assign(url);
+};
+
+const planificar_actividades = () => {
+    let url = navegacion 
+    + 'Planificar-actividades/Planificar-actividades.html?tkn='
+    +token;
+    window.location.assign(url);
+};
+
+const administrar_contrato = () => {
+    let url = navegacion 
+    + 'administrar-contrato/administrar-contrato.html?tkn='
+    +token;
+    window.location.assign(url);
+};
+
+const pago = () => {
+    let url = navegacion + 'pago/pago.html?tkn='+token;
+    window.location.assign(url);
+};
+
+const estadistica_global = () => {
+    let url = navegacion + 'estadistica-global/estadistica-global.html?tkn='+token;
+    window.location.assign(url);
+};
+
+const estadistica_cliente = () => {
+    let url = navegacion + 'estadistica-cliente/estadistica-cliente.html?tkn='+token;
+    window.location.assign(url);
+};
+// fin metodos de navegacion
+
+const validador = ({ nombre, apellido, password, usuario, id_tipo, telefono, email }) => {
+    if (nombre === '') {
         return false;
     }
-    if(apellido === '') {
+    if (apellido === '') {
         return false;
     }
-    if(password === '') {
+    if (password === '') {
         return false;
     }
-    if(usuario === '') {
+    if (usuario === '') {
         return false;
     }
-    if(id_tipo === 'Seleccione...') {
+    if (id_tipo === 'Seleccione...') {
         return false;
     }
-    if(telefono === '') {
+    if (telefono === '') {
         return false;
     }
-    if(email === '') {
+    if (email === '') {
         return false;
     }
     return true;
-}; 
+};
 
-const validador_empresa = ({nom_empresa,fono_empresa,calle,region_id,comuna_id,rut_empresa}) =>{
-    if(nom_empresa === '') {
+const validador_empresa = ({ nom_empresa, fono_empresa, calle, region_id, comuna_id, rut_empresa }) => {
+    if (nom_empresa === '') {
         return false;
     }
-    if(fono_empresa === '') {
+    if (fono_empresa === '') {
         return false;
     }
-    if(calle === '') {
+    if (calle === '') {
         return false;
     }
-    if(region_id === 'Seleccione...') {
+    if (region_id === 'Seleccione...') {
         return false;
     }
-    if(comuna_id === 'Seleccione...') {
+    if (comuna_id === 'Seleccione...') {
         return false;
     }
-    if(rut_empresa === '') {
+    if (rut_empresa === '') {
         return false;
     }
     return true;
 };
 
 const cancelar = () => {
-    let url = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/usuarios/Administrar-Usuario.html';
+    let url = principal + 'Administrar-Usuario.html?tkn=' + token;
     window.location.assign(url);
-}; 
+};
 
-const obtener_regiones = () =>{
+const obtener_regiones = () => {
     let cbx_regiones = document.getElementById('region');
-    cbx_regiones.innerHTML=`
+    cbx_regiones.innerHTML = `
         <option selected>Seleccione...</option>
-    `; 
+    `;
     let url = 'http://localhost:3001/dogueSolution/api/usuario/obtener-region';
-    const modelo_envio = { };
+    const modelo_envio = {};
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
+    cabecera.append("Authorization", "Bearer " + token);
     const cuerpo_envio = JSON.stringify(modelo_envio);
-    var requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: cuerpo_envio,
         redirect: 'follow'
     };
     fetch(url, requestOptions)
-    .then(response => response.text())
-    .then( resp => {
-        let respuesta = JSON.parse(resp);
-        console.info(respuesta);
-        respuesta.data.map( item => {
-            cbx_regiones.innerHTML+=`
+        .then(response => response.text())
+        .then(resp => {
+            let respuesta = JSON.parse(resp);
+            console.info(respuesta);
+            respuesta.data.map(item => {
+                cbx_regiones.innerHTML += `
             <option value="${item.id}">${item.nombre}</option>
-            `; 
-        });
-    })
-    .catch( error => console.info('error',error) ); 
+            `;
+            });
+        })
+        .catch(error => console.info('error', error));
 };
 
 const obtener_comunas = () => {
     let cbx_regiones = document.getElementById('region').value;
     let cbx_comunas = document.getElementById('comuna');
-    console.info('cbx_regiones',cbx_regiones);
-    cbx_comunas.innerHTML=`
+    console.info('cbx_regiones', cbx_regiones);
+    cbx_comunas.innerHTML = `
         <option selected>Seleccione...</option>
-    `; 
+    `;
     let url = 'http://localhost:3001/dogueSolution/api/usuario/obtener-comunas-region';
     const modelo_envio = {
-        region_id:Number(cbx_regiones)
+        region_id: Number(cbx_regiones)
     };
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
+    cabecera.append("Authorization", "Bearer " + token);
     const cuerpo_envio = JSON.stringify(modelo_envio);
-    var requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: cuerpo_envio,
         redirect: 'follow'
     };
     fetch(url, requestOptions)
-    .then(response => response.text())
-    .then( resp => {
-        let respuesta = JSON.parse(resp);
-        console.info(respuesta);
-        respuesta.data.map( item => {
-            cbx_comunas.innerHTML+=`
+        .then(response => response.text())
+        .then(resp => {
+            let respuesta = JSON.parse(resp);
+            console.info(respuesta);
+            respuesta.data.map(item => {
+                cbx_comunas.innerHTML += `
             <option value="${item.id}">${item.nombre}</option>
-            `; 
-        });
-    })
-    .catch( error => console.info('error',error) ); 
+            `;
+            });
+        })
+        .catch(error => console.info('error', error));
 };
 
 const Agregar_empresa = () => {
     let id_tipo = document.getElementById('tipo_usuario').value;
     let formulario = document.getElementById('formulario');
-    console.info('este es el id',id_tipo);
-    if (Number(id_tipo) === 3) {    
+    console.info('este es el id', id_tipo);
+    if (Number(id_tipo) === 1) {
         formulario.innerHTML = `
         <div class="input-group mb-3">
             <span class="input-group-text" id="inputGroup-sizing-default">Nombre Empresa</span>
@@ -162,17 +214,17 @@ const agregar = () => {
     let id_tipo = document.getElementById('tipo_usuario').value;
     let telefono = document.getElementById('telefono').value;
     let email = document.getElementById('email').value;
-    let nom_empresa,fono_empresa,calle,region_id,comuna_id,rut_empresa;
-    
-    let validado = validador({nombre,apellido,password,usuario,id_tipo,telefono,email}); 
+    let nom_empresa, fono_empresa, calle, region_id, comuna_id, rut_empresa;
+
+    let validado = validador({ nombre, apellido, password, usuario, id_tipo, telefono, email });
     if (!validado) {
         return Swal.fire(
             'Completar formulario',
-            'Es necesario Completar el formulario par poder continuar.',
+            'Es necesario completar el formulario par poder continuar.',
             'error'
-        ); 
+        );
     }
-    
+
     let modelo_envio = {
         nombre,
         apellido,
@@ -182,21 +234,21 @@ const agregar = () => {
         telefono,
         email,
     };
-    console.info('modelo_entrada',modelo_envio);
-    if (Number(id_tipo) === 3 ) {
+    console.info('modelo_entrada', modelo_envio);
+    if (Number(id_tipo) === 1) {
         nom_empresa = document.getElementById('empresaNombre').value;
         fono_empresa = document.getElementById('fonoEmpresa').value;
         calle = document.getElementById('calleEmpresa').value;
         region_id = document.getElementById('region').value;
         comuna_id = document.getElementById('comuna').value;
         rut_empresa = document.getElementById('rutEmpresa').value;
-        const vali = validador_empresa({nom_empresa,fono_empresa,calle,region_id,comuna_id,rut_empresa}); 
+        const vali = validador_empresa({ nom_empresa, fono_empresa, calle, region_id, comuna_id, rut_empresa });
         if (!vali) {
             return Swal.fire(
                 'Completar formulario',
-                'Es necesario Completar el formulario par poder continuar.',
+                'Es necesario completar el formulario par poder continuar.',
                 'error'
-            ); 
+            );
         }
         modelo_envio.nom_empresa = nom_empresa;
         modelo_envio.fono_empresa = fono_empresa;
@@ -208,37 +260,39 @@ const agregar = () => {
 
     let cabecera = new Headers();
     cabecera.append("Content-Type", "application/json");
+    cabecera.append("Authorization", "Bearer " + token);
     const cuerpo_envio = JSON.stringify(modelo_envio);
-    var requestOptions = {
+    let requestOptions = {
         method: 'POST',
         headers: cabecera,
         body: cuerpo_envio,
         redirect: 'follow'
     };
-    
+
     console.info('Cuerpo', requestOptions);
     fetch("http://localhost:3001/dogueSolution/api/usuario/agregar-usuario", requestOptions)
-        .then(response => response.text())
-        .then(result => {
-            respuesta = JSON.parse(result);
-            if (respuesta.flg_ok === 0) {
-                return Swal.fire(
-                    'Error al agregar usuario',
-                    respuesta.mensaje,
-                    'error'
-                );
-            } else {
-                Swal.fire(
-                    'Guardado correctamente',
-                    respuesta.mensaje,
-                    'success'
-                ).then( x=> {
-                    window.location.assign('file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/usuarios/Administrar-Usuario.html');
-                });
+    .then(response => response.text())
+    .then(result => {
+        respuesta = JSON.parse(result);
+        if (respuesta.flg_ok === 0) {
+            return Swal.fire(
+                'Error al agregar usuario',
+                respuesta.mensaje,
+                'error'
+            );
+        } else {
+            Swal.fire(
+                'Guardado correctamente',
+                respuesta.mensaje,
+                'success'
+            ).then(x => {
+                let url = principal + 'Administrar-Usuario.html?tkn=' + token;
+                window.location.assign(url);
+            });
 
 
-            }
-        })
-        .catch(error => console.log('error', error));
+        }
+    })
+    .catch(error => console.log('error', error));
 
 };

@@ -4,50 +4,29 @@ const urlParams = new URLSearchParams(queryString);
 const token = urlParams.get('tkn');
 
 let urls =[
-    'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/Planificar-actividades/', // principal 0
+    'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Profesional/Planificar-actividades/', // principal 0
     'http://localhost:3001/dogueSolution/api/Planificar-Actividades/listar-actividades', // url servicio listar actividades
 ];
 
 let pageIndex = 0;
 // Metodos de navegacion
-const navegacion = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/';
+const navegacion = 'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Profesional/';
 
 const dashboard = () => {
     let url = navegacion +'Dashboard.html?tkn='+token;
     window.location.assign(url);
 };
 
-const admin_usuario = () => {
-    let url = navegacion +'usuarios/Administrar-Usuario.html?tkn='+token;
+const Cliente_menu = () => {
+    let url = navegacion +'clientes/clientes.html?tkn='+token;
     window.location.assign(url);
-};
-
-const planificar_actividades = () => {
-    let url = navegacion 
-    + 'Planificar-actividades/Planificar-actividades.html?tkn='
-    +token;
+}; 
+const Actividades_menu = () => {
+    let url = navegacion +'Planificar-actividades/Planificar-actividades.html?tkn='+token;
     window.location.assign(url);
-};
-
-const administrar_contrato = () => {
-    let url = navegacion 
-    + 'administrar-contrato/administrar-contrato.html?tkn='
-    +token;
-    window.location.assign(url);
-};
-
-const pago = () => {
-    let url = navegacion + 'pago/pago.html?tkn='+token;
-    window.location.assign(url);
-};
-
-const estadistica_global = () => {
-    let url = navegacion + 'estadistica-global/estadistica-global.html?tkn='+token;
-    window.location.assign(url);
-};
-
-const estadistica_cliente = () => {
-    let url = navegacion + 'estadistica-cliente/estadistica-cliente.html?tkn='+token;
+}; 
+const Caso_asesoria_menu = () => {
+    let url = navegacion +'caso-asesoria/caso-asesoria.html?tkn='+token;
     window.location.assign(url);
 };
 // fin metodos de navegacion
@@ -66,12 +45,12 @@ const vista_agregar = () => {
 
 const sumarPagina = () => {
     pageIndex = pageIndex + 1;
-    listar_actividades();
+    listar_usuarios();
 };
 
 const restarPagina = () => {
     pageIndex = pageIndex - 1;
-    listar_actividades();
+    listar_usuarios();
 };
 
 const listar_actividades = () => {

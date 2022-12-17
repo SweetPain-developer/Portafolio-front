@@ -5,12 +5,12 @@ const token = urlParams.get('tkn');
 
 // Declaraciones y asignaciones
 let urls = [
-    'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/', // 0
-    'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Administardor/Planificar-actividades/Planificar-actividades.html', // 1
-    'http://localhost:3001/dogueSolution/api/usuario/obtener-usuario-tipo', // 2
-    'http://localhost:3001/dogueSolution/api/Planificar-Actividades/listar-estados', // 3
-    'http://localhost:3001/dogueSolution/api/Planificar-Actividades/listar-servicios', // 4
-    'http://localhost:3001/dogueSolution/api/Planificar-actividades/agregar-actividad' // 5
+    'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Profesional/',
+    'file:///C:/Users/angel/Desktop/Proyectos/Portafolio-front/Profesional/Planificar-actividades/Planificar-actividades.html',
+    'http://localhost:3001/dogueSolution/api/usuario/obtener-usuario-tipo',
+    'http://localhost:3001/dogueSolution/api/Planificar-Actividades/listar-estados',
+    'http://localhost:3001/dogueSolution/api/Planificar-Actividades/listar-servicios',
+    'http://localhost:3001/dogueSolution/api/Planificar-actividades/agregar-actividad'
 ];
 // Metodos de navegacion
 const navegacion = urls[0];
@@ -20,37 +20,16 @@ const dashboard = () => {
     window.location.assign(url);
 };
 
-const admin_usuario = () => {
-    let url = navegacion +'usuarios/Administrar-Usuario.html?tkn='+token;
+const Cliente_menu = () => {
+    let url = navegacion +'clientes/clientes.html?tkn='+token;
     window.location.assign(url);
-};
-
-const planificar_actividades = () => {
-    let url = navegacion 
-    + 'Planificar-actividades/Planificar-actividades.html?tkn='
-    +token;
+}; 
+const Actividades_menu = () => {
+    let url = navegacion +'Planificar-actividades/Planificar-actividades.html?tkn='+token;
     window.location.assign(url);
-};
-
-const administrar_contrato = () => {
-    let url = navegacion 
-    + 'administrar-contrato/administrar-contrato.html?tkn='
-    +token;
-    window.location.assign(url);
-};
-
-const pago = () => {
-    let url = navegacion + 'pago/pago.html?tkn='+token;
-    window.location.assign(url);
-};
-
-const estadistica_global = () => {
-    let url = navegacion + '?tkn='+token;
-    window.location.assign(url);
-};
-
-const estadistica_cliente = () => {
-    let url = navegacion + '?tkn='+token;
+}; 
+const Caso_asesoria_menu = () => {
+    let url = navegacion +'caso-asesoria/caso-asesoria.html?tkn='+token;
     window.location.assign(url);
 };
 // fin metodos de navegacion
@@ -80,7 +59,7 @@ const profesional = () => {
         console.info(respuesta);
         respuesta.data.map( item => {
             combobox.innerHTML+=`
-            <option value="${item.usuario}">${item.usuario}</option>
+            <option value="${item.nombre}">${item.nombre}</option>
             `; 
         });
     })
@@ -114,7 +93,7 @@ const cliente = () => {
         
         respuesta.data.map( item => {
             combobox.innerHTML+=`
-            <option value="${item.usuario}" >${item.usuario}</option>
+            <option value="${item.nombre}" >${item.nombre}</option>
             `;
         });
     })
